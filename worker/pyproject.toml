@@ -13,3 +13,8 @@ dependencies = [
     "typer>=0.29.1",
     "whisperx>=3.8.6",
 ]
+
+[tool.uv.workspace]
+members = [
+    "worker",
+]
