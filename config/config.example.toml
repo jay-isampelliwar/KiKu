@@ -1,0 +1,35 @@
+# Copy this file to config/config.toml and change what you need.
+# Any line left out uses the default shown here. "~" means your home folder.
+
+whisper_model_path  = "/Volumes/T7/Local-Model/whisper/faster-whisper-medium"
+pyannote_model_path = "/Volumes/T7/Local-Model/pyannote/speaker-diarization-community-1"
+python_path         = "worker/.venv/bin/python"
+worker_script       = "worker/src/__main__.py"
+
+# OpenAI model for the title, summary and to-dos. The key goes in .env as OPENAI_API_KEY.
+llm_model = "gpt-5-mini"
+
+meetings_dir = "~/Meetings"
+db_path      = "~/Library/Application Support/Preeti/meetings.db"
+log_dir      = "~/Library/Logs/Preeti"
+
+# Audio inputs. Run `meetingd devices` to see the names. A part of the name also works.
+mic_device    = "CEVCECM"
+system_device = "BlackHole 2ch"
+
+# Only these apps can start a meeting when they use the mic. Run `meetingd mic-users` during
+# a call to see the exact name. Apps in ignore_apps never start a meeting.
+meeting_apps = ["zoom.us", "Google Chrome", "Brave Browser", "Slack", "WhatsApp", "Telegram", "Microsoft Teams", "FaceTime"]
+ignore_apps  = ["Visual Studio Code", "ChatGPT", "Codex", "Claude"]
+
+# Seconds
+chunk_seconds         = 30
+start_confirm_seconds = 15   # meeting app must hold the mic this long
+start_window_seconds  = 30   # give up if no incoming voice by then (voice notes, dictation)
+start_voice_seconds   = 3    # seconds of incoming (system) sound needed to count as a call
+app_release_seconds   = 10   # end after the meeting app lets go of the mic this long
+silence_stop_seconds  = 90   # or end after this much silence on both sources
+
+# Below these levels counts as silence. The mic hears room noise around -45 dB.
+mic_silence_db    = -35.0
+system_silence_db = -50.0
