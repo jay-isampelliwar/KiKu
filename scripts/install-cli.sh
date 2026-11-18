@@ -1,10 +1,10 @@
 #!/bin/bash
-# Install the `preeti` command in ~/.local/bin. It opens the meeting notes menu from any folder.
+# Install the `kiku` command in ~/.local/bin. It opens the meeting notes menu from any folder.
 # Does not touch the background daemon, so no new permission prompts.
 set -euo pipefail
 
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
-TARGET="$HOME/.local/bin/preeti"
+TARGET="$HOME/.local/bin/kiku"
 
 cargo build --release --manifest-path "$REPO/Cargo.toml"
 
@@ -17,5 +17,5 @@ WRAPPER
 chmod +x "$TARGET"
 
 echo "Installed $TARGET"
-echo "Run: preeti            (menu)"
-echo "     preeti last | todos | list | show <id> | pause | resume"
+echo "Run: kiku            (menu)"
+echo "     kiku last | todos | list | show <id> | pause | resume"

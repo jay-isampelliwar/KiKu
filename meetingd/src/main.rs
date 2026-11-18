@@ -351,7 +351,7 @@ fn set_todo(config: &Config, id: i64, status: &str) -> Result<()> {
     let conn = db::open(&config.db_path)?;
 
     if !db::set_todo_status(&conn, id, status)? {
-        anyhow::bail!("no to-do #{id}. Run `preeti todos` to see the numbers");
+        anyhow::bail!("no to-do #{id}. Run `kiku todos` to see the numbers");
     }
     println!("to-do #{id} {status}");
 

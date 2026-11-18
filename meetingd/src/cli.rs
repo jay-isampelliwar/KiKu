@@ -1,4 +1,4 @@
-//! The interactive `preeti` menu: pick with arrow keys, Enter to open, Esc or q to go back.
+//! The interactive `kiku` menu: pick with arrow keys, Enter to open, Esc or q to go back.
 
 use std::io::Write;
 use std::process::{Command, Stdio};
@@ -15,7 +15,7 @@ use crate::{db, recover, view};
 pub fn run(config: &Config) -> Result<()> {
     let term = Term::stdout();
     if !term.is_term() {
-        bail!("the menu needs a terminal. Try: preeti list, preeti last, preeti todos");
+        bail!("the menu needs a terminal. Try: kiku list, kiku last, kiku todos");
     }
 
     let conn = db::open(&config.db_path)?;
@@ -95,7 +95,7 @@ fn header(config: &Config, conn: &Connection) -> Result<String> {
 
     Ok(format!(
         "{}   {state}\n{}",
-        style("Preeti · meeting notes").bold(),
+        style("Kiku · meeting notes").bold(),
         style(format!(
             "{meetings} meeting{}  ·  {open} open task{}  ·  {unreviewed} to review{busy}",
             plural(meetings),

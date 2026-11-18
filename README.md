@@ -1,8 +1,10 @@
-# Preeti
+# Kiku
 
-I attend a lot of meetings in a day, and I can't note down everything. I also don't want to pay a subscription for a note-taking tool. So I built Preeti for myself.
+Kiku (聞く) means "to listen" in Japanese. It listens to my calls in the background.
 
-Preeti runs in the background on my Mac. Whenever a meeting starts on Zoom, Google Meet, Slack, WhatsApp or any other app, it records the call on its own. When the meeting ends, it turns the call into English text, finds who spoke, and writes a title, a summary and my to-dos. Everything is stored in a local database, and I can read it from the terminal with one command: `preeti`.
+I attend a lot of meetings in a day, and I can't note down everything. I also don't want to pay a subscription for a note-taking tool. So I built Kiku for myself.
+
+Kiku runs in the background on my Mac. Whenever a meeting starts on Zoom, Google Meet, Slack, WhatsApp or any other app, it records the call on its own. When the meeting ends, it turns the call into English text, finds who spoke, and writes a title, a summary and my to-dos. Everything is stored in a local database, and I can read it from the terminal with one command: `kiku`.
 
 I don't need to open anything or press any button before a meeting. Once it is set up, it just works.
 
@@ -18,7 +20,7 @@ I don't need to open anything or press any button before a meeting. Once it is s
 - Removes my speaker sound that leaks into my mic, so the same line is not saved twice.
 - Sends the transcript to OpenAI and gets back a title, a summary, key points and my to-dos.
 - Deletes the audio once the notes are ready. Only the text is kept.
-- Lets me read meetings and to-dos, and mark each to-do as keep, done or drop, from the `preeti` menu.
+- Lets me read meetings and to-dos, and mark each to-do as keep, done or drop, from the `kiku` menu.
 
 ---
 
@@ -55,7 +57,7 @@ flowchart LR
     end
 
     db[(SQLite)]
-    cli[preeti<br/>terminal menu]
+    cli[kiku<br/>terminal menu]
 
     ld --> daemon
     apps --> mic
@@ -136,7 +138,7 @@ Recording starts in `Starting`, so the first 15 seconds of the meeting are not l
 | `labelled` | Speakers found, leak removed, audio deleted |
 | `label_failed` | Speaker step failed. The text is still there, just without names |
 | `completed` | Title, summary and to-dos are saved |
-| `summary_failed` | OpenAI step failed. The error is saved. Retry with `preeti resummarize <id>` |
+| `summary_failed` | OpenAI step failed. The error is saved. Retry with `kiku resummarize <id>` |
 
 ### To-do status
 
@@ -178,7 +180,7 @@ On my Mac mini (M4), a 30-second chunk takes about 6-7 seconds to turn into text
 | `hound` | Writes the WAV chunk files |
 | `rusqlite` (bundled) | SQLite database: meetings, chunks, transcript lines, to-dos |
 | `clap` | Commands like `run`, `list`, `todos`, `keep` |
-| `dialoguer` + `console` | The `preeti` menu with arrow keys and colours |
+| `dialoguer` + `console` | The `kiku` menu with arrow keys and colours |
 | `serde`, `serde_json`, `toml` | Config file and the JSON messages to the worker |
 | `tracing`, `tracing-subscriber`, `tracing-appender` | Logs, one file per day, last 7 days kept |
 | `chrono` | Meeting times |
@@ -236,7 +238,7 @@ The meeting sound must go to the speakers **and** to BlackHole at the same time.
 
 Keep the output on `Meeting Capture Output`. If you switch to only speakers or headphones, BlackHole hears nothing, and calls look like voice notes.
 
-Use headphones if you can. Without them, the other person's voice from the speakers also goes into the mic. Preeti removes most of this, but headphones give the cleanest text.
+Use headphones if you can. Without them, the other person's voice from the speakers also goes into the mic. Kiku removes most of this, but headphones give the cleanest text.
 
 ### 2. Download the models
 
@@ -275,7 +277,7 @@ In `config/config.toml`, check these:
 scripts/install.sh
 ```
 
-This builds the release binary, copies it to `~/Library/Application Support/Preeti/bin/meetingd`, registers it with launchd so it starts at every login, and installs the `preeti` command in `~/.local/bin`.
+This builds the release binary, copies it to `~/Library/Application Support/Kiku/bin/meetingd`, registers it with launchd so it starts at every login, and installs the `kiku` command in `~/.local/bin`.
 
 ### 6. Allow permissions
 
@@ -297,11 +299,11 @@ After setup, there is nothing to do before a meeting. Just join the call.
 To read the notes, open any terminal and run:
 
 ```bash
-preeti
+kiku
 ```
 
 ```text
-Preeti · meeting notes   ● Recording meetings automatically
+Kiku · meeting notes   ● Recording meetings automatically
 3 meetings  ·  2 open tasks  ·  1 to review
 
 ❯ Last meeting: summary
@@ -320,14 +322,14 @@ Quick commands without the menu:
 
 | Command | What it does |
 |---|---|
-| `preeti last` | Summary and to-dos of the last meeting |
-| `preeti tasks` | My open to-dos |
-| `preeti todos` | All to-dos, with their `#` numbers |
-| `preeti keep 3` / `done 3` / `drop 3` | Change a to-do |
-| `preeti list` | All meetings |
-| `preeti show <id>` | Notes, to-dos and full transcript of one meeting |
-| `preeti resummarize <id>` | Ask OpenAI again for the notes |
-| `preeti pause` / `resume` | Stop or start recording meetings |
+| `kiku last` | Summary and to-dos of the last meeting |
+| `kiku tasks` | My open to-dos |
+| `kiku todos` | All to-dos, with their `#` numbers |
+| `kiku keep 3` / `done 3` / `drop 3` | Change a to-do |
+| `kiku list` | All meetings |
+| `kiku show <id>` | Notes, to-dos and full transcript of one meeting |
+| `kiku resummarize <id>` | Ask OpenAI again for the notes |
+| `kiku pause` / `resume` | Stop or start recording meetings |
 
 To stop it fully: `scripts/uninstall.sh`. Meetings and notes are kept.
 
@@ -337,11 +339,11 @@ To stop it fully: `scripts/uninstall.sh`. Meetings and notes are kept.
 
 | What | Where |
 |---|---|
-| Database | `~/Library/Application Support/Preeti/meetings.db` |
+| Database | `~/Library/Application Support/Kiku/meetings.db` |
 | Audio while a meeting is processed | `~/Meetings/<meeting-id>/mic/` and `system/` (deleted after) |
-| Logs | `~/Library/Logs/Preeti/meetingd.YYYY-MM-DD.log` (last 7 days) |
-| Installed daemon | `~/Library/Application Support/Preeti/bin/meetingd` |
-| launchd job | `~/Library/LaunchAgents/com.preeti.meetingd.plist` |
+| Logs | `~/Library/Logs/Kiku/meetingd.YYYY-MM-DD.log` (last 7 days) |
+| Installed daemon | `~/Library/Application Support/Kiku/bin/meetingd` |
+| launchd job | `~/Library/LaunchAgents/com.kiku.meetingd.plist` |
 
 Audio is about 230 MB per hour while a meeting is processed, and then it is deleted. The text is about 400 KB per hour, so a full year of daily meetings is around 500 MB.
 
@@ -361,8 +363,8 @@ Audio is about 230 MB per hour while a meeting is processed, and then it is dele
 ## Project layout
 
 ```text
-Preeti/
-  meetingd/                 Rust daemon and the preeti CLI
+Kiku/
+  meetingd/                 Rust daemon and the kiku CLI
     src/
       main.rs               commands and the daemon loop
       audio/                mic + BlackHole capture, 16 kHz WAV chunks, sound level
@@ -372,7 +374,7 @@ Preeti/
       labels.rs             speaker names and mic leak removal
       recover.rs            lock, crash recovery, cleanup
       db.rs                 SQLite
-      cli.rs                the preeti menu
+      cli.rs                the kiku menu
       view.rs               how meetings and to-dos are printed
     Info.plist              lets macOS ask for mic permission
   worker/                   Python ML worker

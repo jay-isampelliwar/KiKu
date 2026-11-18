@@ -3,10 +3,10 @@
 set -euo pipefail
 
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
-LABEL="com.preeti.meetingd"
-APP_DIR="$HOME/Library/Application Support/Preeti"
+LABEL="com.kiku.meetingd"
+APP_DIR="$HOME/Library/Application Support/Kiku"
 BIN="$APP_DIR/bin/meetingd"
-LOGS="$HOME/Library/Logs/Preeti"
+LOGS="$HOME/Library/Logs/Kiku"
 PLIST="$HOME/Library/LaunchAgents/$LABEL.plist"
 DOMAIN="gui/$(id -u)"
 
@@ -26,7 +26,7 @@ sed -e "s|__BIN__|$BIN|g" -e "s|__REPO__|$REPO|g" -e "s|__LOGS__|$LOGS|g" \
     "$REPO/launchd/$LABEL.plist" > "$PLIST"
 plutil -lint "$PLIST" > /dev/null
 
-echo "==> Installing the preeti command"
+echo "==> Installing the kiku command"
 "$REPO/scripts/install-cli.sh" > /dev/null
 
 echo "==> Starting"
@@ -38,7 +38,7 @@ cat <<MSG
 
 Done. meetingd now runs in the background and starts at every login.
   Logs:   $LOGS/meetingd.$(date +%Y-%m-%d).log
-  Notes:  run \`preeti\` in any terminal
+  Notes:  run \`kiku\` in any terminal
   Stop:   scripts/uninstall.sh
 
 On the first meeting, macOS asks to allow microphone access for "meetingd". Click Allow.
