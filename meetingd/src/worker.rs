@@ -425,6 +425,11 @@ fn summarize_meeting(
         Ok(Reply::Summary { summary, seconds, .. }) => match save_notes(conn, meeting_id, &summary) {
             Ok(todos) => {
                 info!(meeting = %meeting_id, seconds, todos, "meeting completed");
+                if config.popup_when_done
+                    && let Err(err) = crate::popup::show_meeting(config, meeting_id)
+                {
+                    warn!(meeting = %meeting_id, "opening notes window: {err:#}");
+                }
                 return Outcome::Done;
             }
             Err(err) => (format!("saving summary: {err:#}"), Outcome::Done),

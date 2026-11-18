@@ -27,6 +27,11 @@ pub struct Config {
     pub silence_stop_seconds: u32,
     pub mic_silence_db: f32,
     pub system_silence_db: f32,
+    /// Open a Terminal window with the notes when a meeting is summarized.
+    pub popup_when_done: bool,
+    /// Where this config was loaded from. Not read from the file.
+    #[serde(skip)]
+    pub config_path: PathBuf,
 }
 
 impl Default for Config {
@@ -66,6 +71,8 @@ impl Default for Config {
             silence_stop_seconds: 90,
             mic_silence_db: -35.0,
             system_silence_db: -50.0,
+            popup_when_done: true,
+            config_path: PathBuf::new(),
         }
     }
 }
@@ -110,6 +117,8 @@ impl Config {
         ] {
             *field = expand_home(field);
         }
+
+        config.config_path = std::path::absolute(path).unwrap_or_else(|_| path.to_path_buf());
 
         Ok(config)
     }

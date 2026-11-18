@@ -5,6 +5,7 @@ mod db;
 mod detect;
 mod labels;
 mod meeting;
+mod popup;
 mod recover;
 mod view;
 mod worker;
@@ -69,6 +70,11 @@ enum Command {
         /// Meeting id, like 2026-11-18-001.
         id: String,
     },
+    /// The screen Terminal opens when a meeting's notes are ready.
+    #[command(hide = true)]
+    Popup {
+        id: String,
+    },
     /// Ask the LLM again for a meeting's title, summary and to-dos.
     Resummarize {
         /// Meeting id, like 2026-11-18-001.
@@ -105,6 +111,7 @@ fn main() -> Result<()> {
         Command::Status => status(&cli.config, &config),
         Command::List => list(&config),
         Command::Show { id } => show(&config, &id),
+        Command::Popup { id } => cli::popup(&config, &id),
         Command::Last => print_with_db(&config, |conn| match db::last_meeting_id(conn)? {
             Some(id) => view::notes(conn, &id),
             None => Ok("No meetings yet.\n".into()),

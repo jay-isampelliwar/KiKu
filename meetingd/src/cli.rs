@@ -149,6 +149,27 @@ fn browse(config: &Config, conn: &Connection, term: &Term, theme: &ColorfulTheme
     }
 }
 
+/// The screen Terminal opens on its own when a meeting's notes are ready.
+pub fn popup(config: &Config, id: &str) -> Result<()> {
+    let term = Term::stdout();
+    let conn = db::open(&config.db_path)?;
+    let theme = ColorfulTheme::default();
+
+    loop {
+        term.clear_screen()?;
+        println!("{}\n", style("Meeting finished. Here are your notes.").green().bold());
+        println!("{}", view::notes(&conn, id)?);
+
+        let items = ["Review to-dos (keep / drop)", "Read transcript", "Open full menu", "Close"];
+        match Select::with_theme(&theme).items(items).default(0).interact_opt()? {
+            Some(0) => review_todos(config, &conn, &term, &theme, Scope::Meeting(id))?,
+            Some(1) => page(&view::transcript(&conn, id)?)?,
+            Some(2) => return run(config),
+            _ => return Ok(()),
+        }
+    }
+}
+
 /// One meeting's notes, with a way to read the transcript. Returns false to go to the main menu.
 fn meeting_page(config: &Config, conn: &Connection, term: &Term, theme: &ColorfulTheme, id: &str) -> Result<bool> {
     loop {

@@ -9,6 +9,9 @@ worker_script       = "worker/src/__main__.py"
 # OpenAI model for the title, summary and to-dos. The key goes in .env as OPENAI_API_KEY.
 llm_model = "gpt-5-mini"
 
+# Open a Terminal window with the summary and to-dos when a meeting's notes are ready.
+popup_when_done = true
+
 meetings_dir = "~/Meetings"
 db_path      = "~/Library/Application Support/Preeti/meetings.db"
 log_dir      = "~/Library/Logs/Preeti"
