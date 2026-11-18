@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Template. scripts/install.sh fills in __BIN__, __REPO__ and __LOGS__. -->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.preeti.meetingd</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>__BIN__</string>
+        <string>--config</string>
+        <string>__REPO__/config/config.toml</string>
+        <string>run</string>
+    </array>
+
+    <!-- Relative paths in the config (python, worker script, .env) are read from here. -->
+    <key>WorkingDirectory</key>
+    <string>__REPO__</string>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <!-- Restart after a crash, or when the T7 drive was not mounted yet at login. -->
+    <key>KeepAlive</key>
+    <dict>
+        <key>SuccessfulExit</key>
+        <false/>
+    </dict>
+    <key>ThrottleInterval</key>
+    <integer>30</integer>
+
+    <!-- Normal logs go to meetingd.YYYY-MM-DD.log. This only catches early errors and panics. -->
+    <key>StandardOutPath</key>
+    <string>__LOGS__/launchd.log</string>
+    <key>StandardErrorPath</key>
+    <string>__LOGS__/launchd.log</string>
+</dict>
+</plist>
